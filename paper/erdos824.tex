@@ -27,7 +27,7 @@
 \begin{document}
 \sloppy
 \begin{abstract}
-Let $h(x)$ be the number of pairs $1\le a<b<x$ with $\gcd(a,b)=1$ and $\sigma(a)=\sigma(b)$. Erd\H{o}s asked whether $h(x)>x^{2-o(1)}$ (Erd\H{o}s Problem \#824). By an argument of Pollack and Pomerance, this follows if for every fixed $\delta>0$ there are $y^{1-o(1)}$ primes $p\le5y$ with $p+1$ free of prime factors exceeding $y^\delta$. We write this implication out with explicit parameters and formalize it in Lean~4. We then check that the argument of the recent OpenAI preprint \emph{Weighted dilation graphs, smooth shifted primes and totient fibers}, which proves the corresponding statement for $p-1$, applies to $p+1$ after a change of sign in two of its sections. Consequently $h(x)=x^{2-o(1)}$, \emph{conditionally on the correctness of that preprint}, which has not been refereed and whose main new estimates we have not independently verified.
+Let $h(x)$ be the number of pairs $1\le a<b<x$ with $\gcd(a,b)=1$ and $\sigma(a)=\sigma(b)$. Erd\H{o}s Problem \#824 asks whether $h(x)>x^{2-o(1)}$. By an argument of Pollack and Pomerance, this follows if for every fixed $\delta>0$ there are $y^{1-o(1)}$ primes $p\le5y$ with $p+1$ free of prime factors exceeding $y^\delta$. We write this implication out with explicit parameters and formalize it in Lean~4. We then check that the argument of the recent OpenAI preprint \emph{Weighted dilation graphs, smooth shifted primes and totient fibers}, which claims the corresponding statement for $p-1$, applies to $p+1$ after a change of sign in two of its sections. Consequently $h(x)=x^{2-o(1)}$, \emph{conditionally on the correctness of that preprint}, which has not been refereed and whose main new estimates we have not independently verified.
 \end{abstract}
 
 \maketitle
@@ -63,7 +63,7 @@ If $\mathrm{A}^+$ holds, then for every $\eps>0$ we have $h(x)>x^{2-\eps}$ for a
 \Cref{thm:main} is the argument of~\cite[\S6]{PP16}, with $\theta$ chosen large but fixed in terms of $\eps$. We give it in full in \S\ref{sec:reduction}, with explicit parameters and under the weaker hypothesis of $y^{1-o(1)}$ (rather than $y/(\log y)^{O(1)}$) smooth shifted primes, because this is the version we have formalized in Lean~4 (\S\ref{sec:lean}).
 
 \begin{theorem}\label{thm:aplus}
-The proof of \Cref{thm:wd} in~\cite{WD}, modified as described in \S\ref{sec:sign}, proves: for every fixed $0<\delta<1/4$, $\#\{p\text{ prime}:\ 2x-2<p\le5x,\ \Pplus(p+1)\le x^\delta\}\ge x^{1-o(1)}$. In particular $\mathrm{A}^+$ holds if the argument of~\cite{WD} is correct.
+Assume that the argument of~\cite{WD} proving \Cref{thm:wd} is correct. Then the same argument, modified as described in \S\ref{sec:sign}, shows that for every fixed $0<\delta<1/4$, $\#\{p\text{ prime}:\ 2x-2<p\le5x,\ \Pplus(p+1)\le x^\delta\}\ge x^{1-o(1)}$; in particular $\mathrm{A}^+$ holds.
 \end{theorem}
 
 \begin{corollary}
@@ -129,7 +129,7 @@ Since $h(x)$ only depends on the integers below $x$, $h(x)=h(\lceil x\rceil)$. H
 
 \section{Formalization}\label{sec:lean}
 
-The lower bound in \Cref{thm:main} is formalized in Lean~4 (v4.33.1) with Mathlib (commit \texttt{0df444a}) in the directory \texttt{lean/} of~\cite{repo}. The definitions are
+The lower bound in \Cref{thm:main} is formalized in Lean~4 (v4.33.1) with Mathlib (commit \texttt{0df444a}) in the directory \texttt{lean/} of~\cite{repo} (main theorem in \texttt{lean/Erdos824/Main.lean}; release \texttt{v1.0}). The definitions are
 \begin{verbatim}
 noncomputable def h (x : ℕ) : ℕ :=
   ((Finset.Ico 1 x ×ˢ Finset.Ico 1 x).filter
