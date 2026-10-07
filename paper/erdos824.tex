@@ -21,6 +21,7 @@
 
 \title[Coprime pairs with equal sum of divisors]{Coprime pairs with equal sum of divisors,\\ assuming smooth shifted primes}
 \author{Shisheng Li}
+\author{Zhong Zhuang}
 \date{Draft, \today.}
 
 \begin{document}
@@ -150,7 +151,7 @@ formalizes the lower bound of \Cref{thm:main} (not the squarefree addendum, whic
 The implication in \Cref{thm:main} is unconditional and machine-checked. \Cref{thm:aplus} rests on~\cite{WD}. We rechecked Sections~6--7 of WD for the change of sign, but we have not independently verified Sections~3--5 (transference for weighted dilation graphs, construction of the ideal operator, lifted shift cancellation; about 2800 lines of source). Writing Lean statements for WD exposed several underspecified points. Examples: the hypothesis $\ell\ge1$ is used in Section~4 but not stated in the definition of prime groups; Section~5 uses a coefficient form of the ideal-operator theorem~\cite[Theorem~4.1]{WD} that the theorem does not state. We have not assessed whether any of them affects the argument; this is part of the paper's explicit reliance on~\cite{WD}.
 
 \section*{Acknowledgements}
-The reduction in \S\ref{sec:reduction} is due to Pollack and Pomerance~\cite{PP16}, after Erd\H{o}s; its relevance to Problem \#824 was also pointed out by T.~Tao. AI tools were used extensively in this work. Claude (Anthropic) checked the adaptation of~\cite{WD} to $p+1$, wrote the text and the Lean formalization. GPT models (OpenAI) were used to referee drafts. The preprint~\cite{WD} is itself AI-generated. The author has checked the arguments presented here and takes responsibility for them.
+The reduction in \S\ref{sec:reduction} is due to Pollack and Pomerance~\cite{PP16}, after Erd\H{o}s; its relevance to Problem \#824 was also pointed out by T.~Tao. AI tools were used extensively in this work. Claude (Anthropic) checked the adaptation of~\cite{WD} to $p+1$, wrote the text and the Lean formalization. GPT models (OpenAI) were used to referee drafts. The preprint~\cite{WD} is itself AI-generated. The authors have checked the arguments presented here and take responsibility for them.
 
 \begin{thebibliography}{99}
 \bibitem{BH98} R.~C. Baker and G.~Harman, Shifted primes without large prime factors, \emph{Acta Arith.} 83 (1998), 331--361.
@@ -160,7 +161,7 @@ The reduction in \S\ref{sec:reduction} is due to Pollack and Pomerance~\cite{PP1
 \bibitem{Er59} P.~Erd\H{o}s, Remarks on number theory. II. Some problems on the $\sigma$ function, \emph{Acta Arith.} 5 (1959), 171--177.
 \bibitem{Li22} J.~D. Lichtman, Primes in arithmetic progressions to large moduli and shifted primes without large prime factors, arXiv:2211.09641.
 \bibitem{PP16} P.~Pollack and C.~Pomerance, Some problems of Erd\H{o}s on the sum-of-divisors function, \emph{Trans. Amer. Math. Soc. Ser. B} 3 (2016), 1--26.
-\bibitem{repo} S.~Li, Erd\H{o}s \#824: Lean formalization, \repo.
+\bibitem{repo} S.~Li and Z.~Zhuang, Erd\H{o}s \#824: Lean formalization, \repo.
 \bibitem{Tao} T.~Tao, comment on Problem \#824, Erd\H{o}s problems forum, 11 August 2025, \url{https://www.erdosproblems.com/forum/thread/824}.
 \bibitem{WD} OpenAI, Weighted dilation graphs, smooth shifted primes and totient fibers, OpenAI Math Release preprint, 24 September 2026, \url{https://github.com/openai/math} (version of commit \texttt{adc7f12}).
 \end{thebibliography}
