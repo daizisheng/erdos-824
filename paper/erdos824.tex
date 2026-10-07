@@ -50,7 +50,7 @@ $\#\{p\text{ prime}:\ 2x<p\le5x,\ \Pplus(p-1)\le x^\delta\}\ge x^{1-o(1)}$.
 The application to $\sigma$ needs $p+1$ instead of $p-1$.
 
 \begin{definition}\label{def:aplus}
-Hypothesis $\mathrm{A}^+$: for every $0<\delta<1/4$ and every $\eta>0$ there is $y_0$ such that for every real $y\ge y_0$,
+Hypothesis $\mathrm{A}^+$: for every $0<\delta<1/4$ and every $\eta>0$ there is $y_0\ge1$ such that for every real $y\ge y_0$,
 \[
  \#\{p\text{ prime}:\ p\le 5y,\ \Pplus(p+1)\le y^\delta\}\ \ge\ y^{1-\eta}.
 \]
@@ -60,7 +60,7 @@ Hypothesis $\mathrm{A}^+$: for every $0<\delta<1/4$ and every $\eta>0$ there is 
 If $\mathrm{A}^+$ holds, then for every $\eps>0$ we have $h(x)>x^{2-\eps}$ for all sufficiently large $x$. The pairs may moreover be taken with $a,b$ squarefree.
 \end{theorem}
 
-\Cref{thm:main} is the argument of~\cite[\S6]{PP16} with $\theta\to\infty$. We give it in full in \S\ref{sec:reduction}, with explicit parameters and under the weaker hypothesis of $y^{1-o(1)}$ (rather than $y/(\log y)^{O(1)}$) smooth shifted primes, because this is the version we have formalized in Lean~4 (\S\ref{sec:lean}).
+\Cref{thm:main} is the argument of~\cite[\S6]{PP16}, with $\theta$ chosen large but fixed in terms of $\eps$. We give it in full in \S\ref{sec:reduction}, with explicit parameters and under the weaker hypothesis of $y^{1-o(1)}$ (rather than $y/(\log y)^{O(1)}$) smooth shifted primes, because this is the version we have formalized in Lean~4 (\S\ref{sec:lean}).
 
 \begin{theorem}\label{thm:aplus}
 The proof of \Cref{thm:wd} in~\cite{WD}, modified as described in \S\ref{sec:sign}, proves: for every fixed $0<\delta<1/4$, $\#\{p\text{ prime}:\ 2x-2<p\le5x,\ \Pplus(p+1)\le x^\delta\}\ge x^{1-o(1)}$. In particular $\mathrm{A}^+$ holds if the argument of~\cite{WD} is correct.
@@ -76,7 +76,7 @@ The status of the corollary is exactly that of~\cite{WD}, an unrefereed preprint
 
 \Cref{thm:aplus} is proved by the argument of~\cite{WD} for \Cref{thm:wd}, which detects primes of the form $2u+1$ with $u$ supported on $x^\delta$-smooth integers; we apply it to primes of the form $2u-1$ instead, so that $p+1=2u$ is $x^\delta$-smooth. The results of Sections~2--5 of~\cite{WD} are used as stated. In Sections~6--7 of~\cite{WD} (the Type II estimate and the prime extraction) one replaces $2u+1$ by $2u-1$ throughout and adjusts the congruences accordingly; the local densities and residue counts of the sieve are the same for both signs.
 
-The one step that is not purely notational is the determinant parametrization in the Type II estimate. Two factorizations $mn=2eh-1$, $m'n=2eh'-1$ with $m\ne m'$ give $m'-m=-2ek$ and $h'-h=-kn$ for some integer $k\ne0$, and then $mh'-m'h=-k(mn-2eh)=k$. So the shifted endpoints are $z=m'h$ and $z+k=mh'$, as in~\cite{WD}, and the shift-cancellation theorem~\cite[Theorem~5.1]{WD}, which holds for all $0<|k|\le(\log x)^C$, applies unchanged; the original argument already uses both signs of $k$.
+The one step that is not purely notational is the determinant parametrization in the Type II estimate. Two factorizations $mn=2eh-1$, $m'n=2eh'-1$ with $m\ne m'$ give $m'-m=-2ek$ and $h'-h=-kn$ for some integer $k\ne0$, and then $mh'-m'h=-k(mn-2eh)=k$. So the shifted endpoints are $z=m'h$ and $z+k=mh'$, as in~\cite{WD}, and the shift-cancellation theorem~\cite[Theorem~5.1]{WD}, which holds for all $0<|k|\le(\log x)^C$, applies unchanged; the original argument already uses both signs of $k$. The converse reconstruction of the factorizations and the divisor-moment bounds, now with $\tau(2u-1)$ and $\tau(v+1)$, go through in the same way.
 
 \section{Proof of \Cref{thm:main}}\label{sec:reduction}
 
@@ -148,7 +148,7 @@ formalizes the lower bound of \Cref{thm:main} (not the squarefree addendum, whic
 
 \section{Status}\label{sec:status}
 
-The implication in \Cref{thm:main} is unconditional and machine-checked. \Cref{thm:aplus} rests on~\cite{WD}. We rechecked Sections~6--7 of WD for the change of sign, but we have not independently verified Sections~3--5 (transference for weighted dilation graphs, construction of the ideal operator, lifted shift cancellation; about 2800 lines of source). Writing Lean statements for WD exposed several underspecified points. Examples: the hypothesis $\ell\ge1$ is used in Section~4 but not stated in the definition of prime groups; Section~5 uses a coefficient form of the ideal-operator theorem~\cite[Theorem~4.1]{WD} that the theorem does not state. We have not assessed whether any of them affects the argument; this is part of the paper's explicit reliance on~\cite{WD}.
+The lower-bound implication in \Cref{thm:main} is unconditional and machine-checked; the squarefree addendum is not part of the formalization. \Cref{thm:aplus} rests on~\cite{WD}. We rechecked Sections~6--7 of WD for the change of sign, but we have not independently verified Sections~3--5 (transference for weighted dilation graphs, construction of the ideal operator, lifted shift cancellation; about 2800 lines of source). Writing Lean statements for WD exposed several underspecified points. Examples: the hypothesis $\ell\ge1$ is used in Section~4 but not stated in the definition of prime groups; Section~5 uses a coefficient form of the ideal-operator theorem~\cite[Theorem~4.1]{WD} that the theorem does not state. We have not assessed whether any of them affects the argument; this is part of the paper's explicit reliance on~\cite{WD}.
 
 \section*{Acknowledgements}
 The reduction in \S\ref{sec:reduction} is due to Pollack and Pomerance~\cite{PP16}, after Erd\H{o}s; its relevance to Problem \#824 was also pointed out by T.~Tao. AI tools were used extensively in this work. Claude (Anthropic) checked the adaptation of~\cite{WD} to $p+1$, wrote the text and the Lean formalization. GPT models (OpenAI) were used to referee drafts. The preprint~\cite{WD} is itself AI-generated. The authors have checked the arguments presented here and take responsibility for them.
