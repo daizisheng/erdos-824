@@ -1,0 +1,214 @@
+\documentclass[11pt]{amsart}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1.1in]{geometry}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{iftex}
+\ifLuaTeX\usepackage[no-math]{fontspec}\setmonofont{DejaVu Sans Mono}[Scale=0.85]\fi
+\usepackage{hyperref}
+\usepackage{cleveref}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\Pplus}{P^{+}}
+\newcommand{\Pminus}{P^{-}}
+\newcommand{\repo}{\url{https://github.com/daizisheng/erdos-824}}
+
+\title[Coprime pairs with equal sum of divisors]{Coprime pairs with equal sum of divisors,\\ assuming smooth shifted primes}
+\author{Shisheng Li}
+\date{Draft, \today.}
+
+\begin{document}
+\sloppy
+\begin{abstract}
+Let $h(x)$ be the number of pairs $1\le a<b<x$ with $\gcd(a,b)=1$ and $\sigma(a)=\sigma(b)$. Erd\H{o}s asked whether $h(x)>x^{2-o(1)}$ (Erd\H{o}s Problem \#824). By an argument of Pollack and Pomerance, this follows if for every fixed $\delta>0$ there are $y^{1-o(1)}$ primes $p\le5y$ with $p+1$ free of prime factors exceeding $y^\delta$. We write this implication out with explicit parameters and formalize it in Lean~4. We then check that the argument of the recent OpenAI preprint \emph{Weighted dilation graphs, smooth shifted primes and totient fibers}, which proves the corresponding statement for $p-1$, applies to $p+1$ after a change of sign in two of its sections. Consequently $h(x)=x^{2-o(1)}$, \emph{conditionally on the correctness of that preprint}, which has not been refereed and whose main new estimates we have not independently verified.
+\end{abstract}
+
+\maketitle
+
+\section{Introduction}
+
+Let $\sigma(n)$ be the sum of the divisors of $n$ and
+\[
+ h(x)=\#\{(a,b):\ 1\le a<b<x,\ \gcd(a,b)=1,\ \sigma(a)=\sigma(b)\}.
+\]
+Trivially $h(x)<x^2$. Erd\H{o}s~\cite{Er59} asked whether $h(x)/x\to\infty$; Problem \#824 of~\cite{EP} asks whether $h(x)>x^{2-o(1)}$. Pollack and Pomerance~\cite[\S6]{PP16} answered Erd\H{o}s's question, proving $h(x)>x^{1.4}$ for large $x$. Following an idea of Erd\H{o}s~\cite{Er35}, their argument shows: if $\theta>1$ is such that there are $y^\theta/(\log y)^{O(1)}$ primes $p\le y^\theta$ with $\Pplus(p+1)\le y$, then there are at least $x^{(2-\eps)(1-1/\theta)+o(1)}$ coprime pairs, for every fixed $\eps>0$. Here $\Pplus(m)$ is the largest prime factor of $m$. With the Baker--Harman value $\theta\approx3.377$~\cite{BH98} this gives the exponent $1.4$; an admissible $\theta$ for every $\theta>1$ would give $x^{2-o(1)}$, as also remarked by Tao on the problem's forum~\cite{Tao}. A claim of $h(x)\ge x^{13/8-o(1)}$ by a different route was submitted to the forum in August 2026~\cite{Cam}.
+
+For a fixed smoothness exponent, the best unconditional result is due to Lichtman~\cite{Li22}: for fixed $a\ne0$ and $\delta>15/(32\sqrt e)=0.2843\ldots$ there are $\gg x/(\log x)^C$ primes $x<p\le2x$ with $\Pplus(p-a)\le x^\delta$. The corresponding statement for every fixed $\delta>0$ is a conjecture of Erd\H{o}s. For $a=1$ it is claimed in the OpenAI preprint~\cite{WD} (``WD'' below):
+
+\begin{theorem}[{\cite[Theorem 1.2]{WD}}]\label{thm:wd}
+For every fixed $0<\delta<1/4$, as $x\to\infty$,
+$\#\{p\text{ prime}:\ 2x<p\le5x,\ \Pplus(p-1)\le x^\delta\}\ge x^{1-o(1)}$.
+\end{theorem}
+
+The application to $\sigma$ needs $p+1$ instead of $p-1$.
+
+\begin{definition}\label{def:aplus}
+Hypothesis $\mathrm{A}^+$: for every $0<\delta<1/4$ and every $\eta>0$ there is $y_0$ such that for every real $y\ge y_0$,
+\[
+ \#\{p\text{ prime}:\ p\le 5y,\ \Pplus(p+1)\le y^\delta\}\ \ge\ y^{1-\eta}.
+\]
+\end{definition}
+
+\begin{theorem}\label{thm:main}
+If $\mathrm{A}^+$ holds, then for every $\eps>0$ we have $h(x)>x^{2-\eps}$ for all sufficiently large $x$. The pairs may moreover be taken with $a,b$ squarefree.
+\end{theorem}
+
+\Cref{thm:main} is the argument of~\cite[\S6]{PP16} with $\theta\to\infty$. We give it in full in \S\ref{sec:reduction}, with explicit parameters and under the weaker hypothesis of $y^{1-o(1)}$ (rather than $y/(\log y)^{O(1)}$) smooth shifted primes, because this is the version we have formalized in Lean~4 (\S\ref{sec:lean}).
+
+\begin{theorem}\label{thm:aplus}
+The proof of \Cref{thm:wd} in~\cite{WD}, modified as described in \S\ref{sec:sign} and \Cref{app:changes}, proves: for every fixed $0<\delta<1/4$, $\#\{p\text{ prime}:\ 2x-2<p\le5x,\ \Pplus(p+1)\le x^\delta\}\ge x^{1-o(1)}$. In particular $\mathrm{A}^+$ holds if the argument of~\cite{WD} is correct.
+\end{theorem}
+
+\begin{corollary}
+If the argument of~\cite{WD} is correct, then $h(x)=x^{2-o(1)}$.
+\end{corollary}
+
+The status of the corollary is exactly that of~\cite{WD}, an unrefereed preprint. Its Sections~3--5 introduce a new transference and shifted-correlation method; we have not verified them independently (\S\ref{sec:status}). Our contribution is the observation that the sign change goes through, a check of the sections that it affects, and the formalization of \Cref{thm:main}.
+
+\section{Smooth successors from the argument of WD}\label{sec:sign}
+
+Section and theorem numbers in this section refer to~\cite{WD}. WD detects primes of the form $N_u=2u+1$, where $u$ carries a weight $A(u)$ supported on integers whose prime factors all lie in $[(\log x)^{20},x^\delta]$; then $p-1=2u$ is $x^\delta$-smooth. We run the same argument with $N_u=2u+\varsigma$ for a fixed sign $\varsigma\in\{1,-1\}$; for $\varsigma=-1$ the prime $p=2u-1$ has $p+1=2u$. \Cref{app:changes} lists every change; all other text of WD is used verbatim.
+
+\subsection*{Sections 1--5 and 8 of WD are unchanged.} The form $2u+1$ does not occur in them. The shift-cancellation theorem~\cite[Theorem~5.1]{WD} is stated for every integral shift $0<|k|\le L^C$ ($L=\log x$), and the physical operator underlying the transference theorem~\cite[Theorem~3.5]{WD} moves $n\mapsto n+kD$ with $0<|k|$. We checked that WD uses no distribution result for primes in the residue class $\pm1$ modulo $d$ (of Bombieri--Vinogradov type or otherwise): primes enter only through the Siegel--Walfisz theorem in all reduced residue classes and the prime number theorem in short logarithmic cells.
+
+\subsection*{Section 6 (Type II, \cite[Theorem 6.1]{WD}).} The estimate concerns $\sum_{mn=2u+\varsigma}A(u)\Psi(u/x)\alpha_m\beta_n$. After the split $u=eh$ and Cauchy's inequality in $(e,n)$, two factorizations with common $e,n$,
+\[
+ mn=2eh+\varsigma,\qquad m'n=2eh'+\varsigma,\qquad m\ne m',
+\]
+force $2e\mid m'-m$, because $mn\equiv\varsigma\pmod{2e}$ makes $n$ a unit modulo $2e$. Write $m'-m=2\varsigma ek$ with $k\ne0$. Then $h'-h=\varsigma kn$ and
+\[
+ mh'-m'h=m(h+\varsigma kn)-(m+2\varsigma ek)h=\varsigma k(mn-2eh)=\varsigma^2k=k,
+\]
+so $z=m'h$ and $z+k=mh'$ are exactly the endpoints of WD. Conversely, given $k\ne0$, $m'h=z$, $mh'=z+k$, $m'\equiv m\pmod{2|k|}$ and $e=(m'-m)/(2\varsigma k)>0$, we get $m(h'-h)=\varsigma k(2eh+\varsigma)$. As every prime factor of $m$ exceeds $W$ while $|k|\le L^{O(1)}$, $(m,k)=1$; so $n=(2eh+\varsigma)/m$ is a positive integer ($2eh+\varsigma\ge1$) and both factorizations are recovered. The diagonal becomes $\sum_v\tau(v)\tau(v-\varsigma)^3$, bounded exactly as before, and the pulled-back cutoff $n=(m'-m)z/(\varsigma kmm')+\varsigma/m$ has the same derivative bounds. Everything after the endpoint identification is unchanged.
+
+WD's own Type II argument already uses negative shifts: there $m'-m=2ek$ with $e>0$, so $k<0$ whenever $m'<m$, and both orders occur in the off-diagonal sum. Hence the $p+1$ version needs \cite[Theorem~5.1]{WD} for no shifts other than those WD itself uses.
+
+\subsection*{Section 7 (prime extraction).} Put $N_u=2u+\varsigma$.
+\begin{itemize}[leftmargin=*]
+\item Type I: for odd squarefree $d$, $2u+\varsigma\equiv0\pmod d$ means $u\equiv-\varsigma2^{-1}\pmod d$, a single reduced class. The proof uses only that the class is a fixed reduced class.
+\item Preliminary sieve: odd primes divide $N_u$ with density $1/(p-1)$ for either sign.
+\item Balanced composites: $D_1\mid u$ gives $mn\equiv\varsigma\pmod{D_1}$, and the banned event at a sieve prime $l$ is $mn\equiv\varsigma\pmod l$. It has $l-1$ residue pairs and is disjoint from $mn\equiv0$ ($2l-1$ pairs); there are $\varphi(D_1)$ pairs modulo $D_1$ with $mn\equiv\varsigma$. All densities and remainders are as in WD.
+\item Conclusion: since $\Psi$ is supported in $[1,2]$, the primes $p=2u+\varsigma$ satisfy $2x-1\le p\le4x+1$, and $\Pplus(p-\varsigma)=\Pplus(2u)\le x^\delta$.
+\end{itemize}
+
+\section{Proof of \Cref{thm:main}}\label{sec:reduction}
+
+Write $L=\log x$. Fix $\eps\in(0,1)$, a real $B\ge8/\eps$, $\eta=\eps/16$ and $\delta=1/(2B)\in(0,1/4)$; these are fixed before $x\to\infty$. For large $x$ put $y=L^B$,
+\[
+ \mathcal P=\{p\text{ prime}:\ p\le5y,\ \Pplus(p+1)\le y^\delta\},\qquad M=|\mathcal P|.
+\]
+By $\mathrm{A}^+$, $M\ge y^{1-\eta}=L^{B(1-\eta)}$ for all large $x$. Let $k=\lfloor L/\log(5y+1)\rfloor$. Then $(5y+1)^k\le x$, and since $\log(5y+1)=B\log L+O(1)$,
+\begin{equation}\label{eq:k}
+ k=\frac{L}{B\log L}(1+o(1)),\qquad k\le L .
+\end{equation}
+For large $x$, $M\ge L^2\ge2k$ because $B(1-\eta)>2$.
+
+\subsection{The family} Let $\mathcal A$ be the set of products of $k$ distinct primes of $\mathcal P$. Each $a\in\mathcal A$ is squarefree and $a<(5y+1)^k\le x$, and distinct $k$-subsets give distinct products. So $N:=|\mathcal A|=\binom Mk\ge(M/k)^k$ and, by~\eqref{eq:k} and $\log k\le\log L$,
+\begin{equation}\label{eq:N}
+ \log N\ge k\log L\,(B(1-\eta)-1)=L\Bigl(1-\eta-\frac1B\Bigr)(1+o(1)).
+\end{equation}
+For $a=p_1\cdots p_k$ we have $\sigma(a)=\prod_i(p_i+1)\le x$, and every prime factor of $\sigma(a)$ is at most $y^\delta=L^{1/2}$. The number $U$ of $L^{1/2}$-smooth integers in $[1,x]$ satisfies
+\begin{equation}\label{eq:U}
+ U\le\Bigl(1+\frac L{\log2}\Bigr)^{L^{1/2}},\qquad \log U=o(L),
+\end{equation}
+since such an integer is $\prod_{q\le L^{1/2}}q^{e_q}$ with $0\le e_q\le L/\log2$.
+
+\subsection{Many equal values} With $r(s)=\#\{a\in\mathcal A:\sigma(a)=s\}$, Cauchy's inequality gives
+\[
+ \#\{(a,b)\in\mathcal A^2:\ \sigma(a)=\sigma(b)\}=\sum_sr(s)^2\ge N^2/U .
+\]
+
+\subsection{Pairs sharing many primes} Let $t=\lceil\eta k\rceil$. The ordered pairs in $\mathcal A^2$ sharing at least $t$ primes number at most $N\binom kt\binom M{k-t}$ (choose $a$, $t$ of its primes, and the other $k-t$ primes of $b$), and
+\[
+ \binom M{k-t}\Big/\binom Mk=\prod_{i=0}^{t-1}\frac{k-i}{M-k+t-i}\le\Bigl(\frac{2k}M\Bigr)^t,\qquad\binom kt\le2^k .
+\]
+By~\eqref{eq:k}, \eqref{eq:U} and $M\ge L^{B(1-\eta)}$,
+\begin{align*}
+ \log\bigl(2^k(2k/M)^t\cdot2U\bigr)&\le(k+1)\log2+\log U-\eta k\bigl(B(1-\eta)\log L-\log(2L)\bigr)\\
+ &=-\eta L\Bigl(1-\eta-\frac1B\Bigr)(1+o(1))+o(L),
+\end{align*}
+which is negative for large $x$. So at least $N^2/(2U)$ ordered pairs $(a,b)$ have $\sigma(a)=\sigma(b)$ and share fewer than $t$ primes; in particular $a\ne b$.
+
+\subsection{Removing the common factor} For such a pair let $g=\gcd(a,b)$, $u=a/g$, $v=b/g$. As $a,b$ are squarefree, $g,u,v$ are pairwise coprime, so $\sigma(g)\sigma(u)=\sigma(g)\sigma(v)$ and $\sigma(u)=\sigma(v)$, with $\gcd(u,v)=1$, $u\ne v$, and $u,v<x$ squarefree. The integer $g$ is a product of at most $t-1<\eta k$ primes below $5y+1$, so $g\le(5y+1)^{\eta k}\le x^\eta$. Given the ordered pair $(u,v)$, the pair $(a,b)=(gu,gv)$ is determined by $g$; each unordered pair $\{u,v\}$ therefore arises from at most $2x^\eta$ ordered pairs $(a,b)$. Hence
+\[
+ h(x)\ge\frac{N^2}{4Ux^\eta},\qquad
+ \log h(x)\ge\Bigl(2-3\eta-\frac2B\Bigr)L-o(L)>(2-\eps)L
+\]
+for large $x$, because $3\eta+2/B\le3\eps/16+\eps/4<\eps/2$. \qed
+
+\begin{remark}
+Since $h(x)$ only depends on the integers below $x$, $h(x)=h(\lceil x\rceil)$; so it suffices to prove the theorem for integer $x$, which is the form formalized in Lean. Pollack and Pomerance count pairs with $b\le x$; the difference is immaterial.
+\end{remark}
+
+\section{Formalization}\label{sec:lean}
+
+\Cref{thm:main} is formalized in Lean~4 (v4.33.1) with Mathlib (commit \texttt{0df444a}) in the directory \texttt{lean/} of~\cite{repo}. The definitions are
+\begin{verbatim}
+noncomputable def h (x : ℕ) : ℕ :=
+  ((Finset.Ico 1 x ×ˢ Finset.Ico 1 x).filter
+    (fun p => p.1 < p.2 ∧ Nat.Coprime p.1 p.2 ∧ sigma 1 p.1 = sigma 1 p.2)).card
+def SmoothSuccessorHypWeak : Prop :=
+  ∀ δ : ℝ, 0 < δ → δ < 1/4 → ∀ η : ℝ, 0 < η → ∃ y0 : ℝ, ∀ y : ℝ, y0 ≤ y →
+    (y ^ (1 - η) : ℝ) ≤ (((Finset.Iic ⌊5*y⌋₊).filter
+      (fun p => p.Prime ∧ ∀ q ∈ (p+1).primeFactors, ((q:ℕ):ℝ) ≤ y ^ δ)).card : ℝ)
+\end{verbatim}
+where \texttt{sigma 1} is Mathlib's $\sigma_1=\sigma$; \texttt{SmoothSuccessorHypWeak} is \Cref{def:aplus}. The theorem
+\begin{verbatim}
+theorem erdos824_of_smoothSuccessorWeak (H : SmoothSuccessorHypWeak) :
+    ∀ ε : ℝ, 0 < ε → ∃ X : ℝ, ∀ x : ℕ, X ≤ x → (x:ℝ) ^ (2 - ε) < (h x : ℝ)
+\end{verbatim}
+has no \texttt{sorry}, and \texttt{\#print axioms} reports only \texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}. The Lean proof follows \S\ref{sec:reduction} with $B=16/\eps$ and $\delta=\eps/32$.
+
+\section{Status}\label{sec:status}
+
+\Cref{thm:main} is unconditional and machine-checked. \Cref{thm:aplus} rests on~\cite{WD}. We rechecked Sections~6--7 of WD for the change of sign, but we have not independently verified Sections~3--5 (transference for weighted dilation graphs, construction of the ideal operator, lifted shift cancellation; about 2800 lines of source). Writing Lean statements for WD exposed several underspecified points. Examples: the hypothesis $\ell\ge1$ is used in Section~4 but not stated in the definition of prime groups; Section~5 uses a coefficient form of the ideal-operator theorem~\cite[Theorem~4.1]{WD} that the theorem does not state. None is known to affect the conclusion.
+
+\section*{Acknowledgements}
+The reduction in \S\ref{sec:reduction} is due to Pollack and Pomerance~\cite{PP16}, after Erd\H{o}s; its relevance to Problem \#824 was also pointed out by T.~Tao. AI tools were used extensively in this work. Claude (Anthropic) adapted~\cite{WD} to the sign $\varsigma$, wrote the text and the Lean formalization. GPT models (OpenAI) were used to referee drafts. The preprint~\cite{WD} is itself AI-generated. The author has checked the arguments presented here and takes responsibility for them.
+
+\appendix
+\section{List of changes to WD}\label{app:changes}
+
+Labels are those of the \LaTeX{} source of~\cite{WD}; all other text of WD is used verbatim.
+
+\medskip
+{\small
+\begin{tabular}{@{}p{0.32\textwidth}p{0.28\textwidth}p{0.32\textwidth}@{}}
+\toprule
+Location in WD & original & with sign $\varsigma$\\
+\midrule
+Thm 6.1, \texttt{\allowbreak eq:typeii-bound} & $mn=2u+1$ & $mn=2u+\varsigma$\\
+\S6, pre-Cauchy bound, divisor count & $\tau(2u+1)$, divisors of $2u+1$ & $\tau(2u+\varsigma)$, divisors of $2u+\varsigma$\\
+\S6, \texttt{\allowbreak eq:typeii-separated-B},\newline \texttt{\allowbreak eq:typeii-cauchy} & $mn=2eh+1$ & $mn=2eh+\varsigma$\\
+\S6, \texttt{\allowbreak eq:typeii-diagonal} & $e\mid(mn-1)/2$, $\tau(v-1)^3$ & $e\mid(mn-\varsigma)/2$, $\tau(v-\varsigma)^3$\\
+\S6, \texttt{\allowbreak eq:typeii-determinant} & $m'-m=2ek$, $h'-h=kn$ & $m'-m=2\varsigma ek$, $h'-h=\varsigma kn$\\
+\S6, \texttt{\allowbreak eq:typeii-converse-identity} & $m(h'-h)=k(2eh+1)$ & $m(h'-h)=\varsigma k(2eh+\varsigma)$\\
+\S6, \texttt{\allowbreak eq:typeii-pulled-back} & $e=\frac{m'-m}{2k}$, $n=\cdots+\frac1m$ & $e=\frac{m'-m}{2\varsigma k}$, $n=\cdots+\frac{\varsigma}m$\\
+\S7, definition & $N_u=2u+1$ & $N_u=2u+\varsigma$\\
+\S7, \texttt{prop:typeI} & class $2u+1\equiv0$ & class $u\equiv-\varsigma2^{-1}\pmod d$\\
+\S7, balanced range & $u=\frac{mn-1}2$, $mn\equiv1\ (D_1)$, banned $mn\equiv1$ & $u=\frac{mn-\varsigma}2$, $mn\equiv\varsigma\ (D_1)$, banned $mn\equiv\varsigma$\\
+\S7, conclusion & $2u+1$ prime, $\Pplus(p-1)$ & $2u+\varsigma$ prime, $\Pplus(p-\varsigma)$\\
+\bottomrule
+\end{tabular}}
+
+\begin{thebibliography}{99}
+\bibitem{BH98} R.~C. Baker and G.~Harman, Shifted primes without large prime factors, \emph{Acta Arith.} 83 (1998), 331--361.
+\bibitem{Cam} Cam (submitted by user donteatllamas), A partial proof of Erd\H{o}s Problem \#824 with exponent $13/8$, \url{https://www.erdosproblems.com/824}, 28 August 2026.
+\bibitem{EP} T.~F. Bloom, Erd\H{o}s problems, \url{https://www.erdosproblems.com}, Problem \#824.
+\bibitem{Er35} P.~Erd\H{o}s, On the normal number of prime factors of $p-1$ and some related problems concerning Euler's $\varphi$-function, \emph{Quart. J. Math. Oxford Ser.} 6 (1935), 205--213.
+\bibitem{Er59} P.~Erd\H{o}s, Remarks on number theory. II. Some problems on the $\sigma$ function, \emph{Acta Arith.} 5 (1959), 171--177.
+\bibitem{Li22} J.~D. Lichtman, Primes in arithmetic progressions to large moduli and shifted primes without large prime factors, arXiv:2211.09641.
+\bibitem{PP16} P.~Pollack and C.~Pomerance, Some problems of Erd\H{o}s on the sum-of-divisors function, \emph{Trans. Amer. Math. Soc. Ser. B} 3 (2016), 1--26.
+\bibitem{repo} S.~Li, Erd\H{o}s \#824: Lean formalization, \repo.
+\bibitem{Tao} T.~Tao, comment on Problem \#824, Erd\H{o}s problems forum, 11 August 2025.
+\bibitem{WD} OpenAI, Weighted dilation graphs, smooth shifted primes and totient fibers, OpenAI Math Release preprint, 24 September 2026, \url{https://github.com/openai/math} (version of commit \texttt{adc7f12}).
+\end{thebibliography}
+
+\end{document}

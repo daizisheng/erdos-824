@@ -1,0 +1,4 @@
+.lake/
+*.log
+*.log.rc
+*.log.unit
