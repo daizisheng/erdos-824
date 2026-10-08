@@ -1,5 +1,7 @@
 # Erdős Problem #824: coprime pairs with equal sum of divisors
 
+**Authors:** Shisheng Li and Zhong Zhuang (joint work).
+
 Let h(x) be the number of pairs 1 ≤ a < b < x with gcd(a,b) = 1 and σ(a) = σ(b), where σ is the sum of divisors. Erdős asked whether h(x) > x^{2−o(1)}.
 
 **Theorem 1 (Lean-verified).** Suppose that for every fixed δ ∈ (0, 1/4) there are at least y^{1−o(1)} primes p ≤ 5y with P⁺(p+1) ≤ y^δ (Hypothesis A⁺, "smooth successors"). Then h(x) > x^{2−ε} for every ε > 0 and all large x; the pairs can be taken squarefree. This is the argument of Pollack–Pomerance (2016, §6), written out with explicit parameters.
@@ -7,7 +9,7 @@ Let h(x) be the number of pairs 1 ≤ a < b < x with gcd(a,b) = 1 and σ(a) = σ
 **Theorem 2 (conditional on an unrefereed preprint).** The proof of Theorem 1.2 of OpenAI's preprint *Weighted dilation graphs, smooth shifted primes and totient fibers* (2026-09-24, "WD"), which gives smooth *predecessors* p−1, proves A⁺ after a change of sign in its Sections 6–7; Appendix A of the paper lists every change. Hence h(x) = x^{2−o(1)} **if the argument of WD is correct.** WD's Sections 3–5 (transference, ideal operator, shift cancellation) have not been independently verified.
 
 Contents:
-- `paper/erdos824.tex` — the paper. It is a draft; audit in progress.
+- `paper/erdos824.tex` — the paper, by Shisheng Li and Zhong Zhuang.
 - `lean/` — a Lean 4 formalization of Theorem 1, with no `sorry`.
 
 ## Checking the Lean proof
