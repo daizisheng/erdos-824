@@ -2,7 +2,7 @@
 
 **Authors:** Shisheng Li and Zhong Zhuang (joint work).
 
-Let h(x) be the number of pairs 1 ≤ a < b < x with gcd(a,b) = 1 and σ(a) = σ(b), where σ is the sum of divisors. Erdős asked whether h(x) > x^{2−o(1)}.
+Let h(x) be the number of pairs 1 ≤ a < b < x with gcd(a,b) = 1 and σ(a) = σ(b), where σ is the sum of divisors. Erdős Problem #824 asks whether h(x) > x^{2−o(1)}.
 
 **Theorem 1 (Lean-verified).** Suppose that for every fixed δ ∈ (0, 1/4) there are at least y^{1−o(1)} primes p ≤ 5y with P⁺(p+1) ≤ y^δ (Hypothesis A⁺, "smooth successors"). Then h(x) > x^{2−ε} for every ε > 0 and all large x; the pairs can be taken squarefree. This is the argument of Pollack–Pomerance (2016, §6), written out with explicit parameters.
 
