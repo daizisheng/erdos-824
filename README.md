@@ -4,9 +4,9 @@
 
 Let h(x) be the number of pairs 1 ≤ a < b < x with gcd(a,b) = 1 and σ(a) = σ(b), where σ is the sum of divisors. Erdős Problem #824 asks whether h(x) > x^{2−o(1)}.
 
-**Theorem 1.** Suppose that for every fixed δ ∈ (0, 1/4) there are at least y^{1−o(1)} primes p ≤ 5y with P⁺(p+1) ≤ y^δ (Hypothesis A⁺, "smooth successors"). Then h(x) > x^{2−ε} for every ε > 0 and all large x; the pairs can be taken squarefree. This is the argument of Pollack–Pomerance (2016, §6), written out with explicit parameters. The lower bound (without the squarefree addendum) is verified in Lean.
+**Theorem 1** (Theorem 1.3 of the paper)**.** Suppose that for every fixed δ ∈ (0, 1/4) there are at least y^{1−o(1)} primes p ≤ 5y with P⁺(p+1) ≤ y^δ (Hypothesis A⁺, "smooth successors"). Then h(x) > x^{2−ε} for every ε > 0 and all large x; the pairs can be taken squarefree. This is the argument of Pollack–Pomerance (2016, §6), written out with explicit parameters. The lower bound (without the squarefree addendum) is verified in Lean.
 
-**Theorem 2 (conditional on an unrefereed preprint).** The proof of Theorem 1.2 of OpenAI's preprint *Weighted dilation graphs, smooth shifted primes and totient fibers* (2026-09-24, "WD"), which gives smooth *predecessors* p−1, proves A⁺ after a change of sign in its Sections 6–7 (Section 2 of the paper). Hence h(x) = x^{2−o(1)} **if the argument of WD is correct.** WD's Sections 3–5 (transference, ideal operator, shift cancellation) have not been independently verified.
+**Theorem 2** (Theorem 1.4 of the paper; conditional on an unrefereed preprint)**.** OpenAI's preprint *Weighted dilation graphs, smooth shifted primes and totient fibers* (2026-09-24, "WD") claims, in its Theorem 1.2, the corresponding statement for smooth *predecessors* p−1. If the argument of WD is correct, the same argument, after a change of sign in its Sections 6–7 (Section 2 of the paper), proves A⁺. Hence h(x) = x^{2−o(1)} **if the argument of WD is correct.** WD's Sections 3–5 (transference, ideal operator, shift cancellation) have not been independently verified.
 
 Contents:
 - `paper/erdos824.tex` — the paper, by Shisheng Li and Zhong Zhuang.
