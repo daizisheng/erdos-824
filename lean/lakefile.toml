@@ -1,6 +1,6 @@
 name = "Erdos824"
 version = "0.1.0"
-defaultTargets = ["Erdos824"]
+defaultTargets = ["Erdos824", "Challenge", "Solution"]
 
 [leanOptions]
 autoImplicit = false
@@ -12,3 +12,11 @@ rev = "065356127b1dc0016f66b7283ce0ce2c4055aa55"
 
 [[lean_lib]]
 name = "Erdos824"
+
+[[lean_lib]]
+name = "Challenge"
+roots = ["Challenge"]
+
+[[lean_lib]]
+name = "Solution"
+roots = ["Solution"]

@@ -1,6 +1,7 @@
 module
 
 public import Erdos824
+public import Solution
 
 public section
 
@@ -15,3 +16,6 @@ the one external input; it is not formalized here (see the paper). -/
 #check @Erdos824.erdos824_of_smoothSuccessorWeak
 #print axioms Erdos824.erdos824_of_smoothSuccessor
 #print axioms Erdos824.erdos824_of_smoothSuccessorWeak
+
+#check @Palomar824.main_result
+#print axioms Palomar824.main_result
