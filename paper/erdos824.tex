@@ -3,7 +3,7 @@
 \usepackage[margin=1.1in]{geometry}
 \usepackage{enumitem}
 \usepackage{iftex}
-\ifLuaTeX\usepackage[no-math]{fontspec}\setmonofont{DejaVu Sans Mono}[Scale=0.85]\fi
+\ifPDFTeX\else\usepackage[no-math]{fontspec}\setmonofont{DejaVuSansMono.ttf}[Scale=0.85]\fi
 \usepackage{hyperref}
 \usepackage{cleveref}
 \newtheorem{theorem}{Theorem}[section]
@@ -22,7 +22,7 @@
 \title[Coprime pairs with equal sum of divisors]{Coprime pairs with equal sum of divisors,\\ assuming smooth shifted primes}
 \author{Shisheng Li}
 \author{Zhong Zhuang}
-\date{Draft, \today.}
+\date{Draft, 11 October 2026.}
 
 \begin{document}
 \sloppy
@@ -129,7 +129,7 @@ Since $h(x)$ only depends on the integers below $x$, $h(x)=h(\lceil x\rceil)$. H
 
 \section{Formalization}\label{sec:lean}
 
-The lower bound in \Cref{thm:main} is formalized in Lean~4 (v4.33.1) with Mathlib (commit \texttt{0df444a}) in the directory \texttt{lean/} of~\cite{repo} (main theorem in \texttt{lean/Erdos824/Main.lean}; release \texttt{v1.0}). The definitions are
+The lower bound in \Cref{thm:main} is formalized in Lean~4 (v4.35.0-rc2) with Mathlib (commit \texttt{0653561}) in the directory \texttt{lean/} of~\cite{repo} (main theorem in \texttt{lean/Erdos824/Main.lean}). The definitions are
 \begin{verbatim}
 noncomputable def h (x : ℕ) : ℕ :=
   ((Finset.Ico 1 x ×ˢ Finset.Ico 1 x).filter
@@ -151,7 +151,7 @@ formalizes the lower bound of \Cref{thm:main} (not the squarefree addendum, whic
 The lower-bound implication in \Cref{thm:main} is unconditional and machine-checked; the squarefree addendum is not part of the formalization. \Cref{thm:aplus} rests on~\cite{WD}. We rechecked Sections~6--7 of WD for the change of sign, but we have not independently verified Sections~3--5 (transference for weighted dilation graphs, construction of the ideal operator, lifted shift cancellation; about 2800 lines of source). Writing Lean statements for WD raised a hypothesis clarification: the definition of prime groups writes $\ell\in\mathbb N$, whereas the proof in Section~4 uses $\ell\ge1$. The application in Section~7 takes $\ell=1$, so this point does not obstruct the present application.
 
 \section*{Acknowledgements}
-The reduction in \S\ref{sec:reduction} is due to Pollack and Pomerance~\cite{PP16}, after Erd\H{o}s; its relevance to Problem \#824 was also pointed out by T.~Tao. AI tools were used extensively in this work. Claude (Anthropic) checked the adaptation of~\cite{WD} to $p+1$, wrote the text and the Lean formalization. GPT models (OpenAI) were used to referee drafts. The preprint~\cite{WD} is itself AI-generated. The authors have checked the arguments presented here and take responsibility for them.
+The reduction in \S\ref{sec:reduction} is due to Pollack and Pomerance~\cite{PP16}, after Erd\H{o}s; its relevance to Problem \#824 was also pointed out by T.~Tao. AI tools were used extensively in this work. The project owner reports that ChatGPT (OpenAI) produced the Lean formalization and that it has not undergone human mathematical review. Codex (OpenAI) adapted the formalization to the current Lean toolchain and Palomar submission format. Mechanical verification of the conditional implication does not constitute human review or verify Hypothesis~$\mathrm{A}^+$ or the argument of~\cite{WD}. The preprint~\cite{WD} is itself AI-generated.
 
 \begin{thebibliography}{99}
 \bibitem{BH98} R.~C. Baker and G.~Harman, Shifted primes without large prime factors, \emph{Acta Arith.} 83 (1998), 331--361.

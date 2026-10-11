@@ -1,5 +1,9 @@
-import Erdos824.Core
-import Erdos824.Analytic
+module
+
+public import Erdos824.Core
+public import Erdos824.Analytic
+
+public section
 
 /-!
 # Erdős #824 from hypothesis A⁺: analytic part

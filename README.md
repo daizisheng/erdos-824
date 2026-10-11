@@ -10,7 +10,7 @@ Let h(x) be the number of pairs 1 ≤ a < b < x with gcd(a,b) = 1 and σ(a) = σ
 
 Contents:
 - `paper/erdos824.tex` — the paper, by Shisheng Li and Zhong Zhuang.
-- `lean/` — a Lean 4 formalization of the lower bound in Theorem 1 (A⁺ ⇒ h(x) > x^{2−ε}), with no `sorry`. The squarefree addendum and Theorem 2 are proved on paper only.
+- `lean/` — a Lean 4 formalization of the lower bound in Theorem 1 (A⁺ ⇒ h(x) > x^{2−ε}), with no proof gaps. The squarefree addendum and Theorem 2 are proved on paper only.
 
 ## Checking the Lean proof
 
@@ -25,7 +25,10 @@ lake env lean Check.lean
 'Erdos824.erdos824_of_smoothSuccessor' depends on axioms: [propext, Classical.choice, Quot.sound]
 'Erdos824.erdos824_of_smoothSuccessorWeak' depends on axioms: [propext, Classical.choice, Quot.sound]
 ```
-There is no `sorry` and there are no project axioms. Toolchain `leanprover/lean4:v4.33.1`, Mathlib `0df444a`.
+The proof development and `Solution.lean` contain no `sorry` and no project axioms.
+`Challenge.lean` has one deliberate statement placeholder for Comparator.
+Toolchain `leanprover/lean4:v4.35.0-rc2`, Mathlib
+`065356127b1dc0016f66b7283ce0ce2c4055aa55` (the matching `v4.35.0-rc2` release).
 
 The main statements are:
 ```lean
@@ -51,3 +54,49 @@ theorem erdos824_of_smoothSuccessor (H : SmoothSuccessorHyp) : -- same conclusio
 | `Core.lean` | the finite counting: Cauchy–Schwarz over σ-values, the bound for pairs sharing many primes, the gcd-removal injection, binomial bounds |
 | `Analytic.lean` | real inequalities for the parameter choices |
 | `Main.lean` | asymptotics (B = 16/ε, η = ε/16, δ = ε/32) and the two main theorems |
+
+## Palomar statement and full mechanical preflight
+
+The entry advertised by `lean/comparator.json` is `Palomar824.main_result`:
+**A⁺ implies the near-quadratic lower bound for natural x**. The independent
+`lean/Challenge.lean` states the pair count, smooth-successor assumption, and
+conclusion using only Mathlib. `lean/Solution.lean` proves the matching statement
+using `Erdos824.erdos824_of_smoothSuccessorWeak`. A⁺ is an explicit hypothesis,
+not a project axiom. The squarefree addendum, the WD argument, and an
+unconditional solution of #824 are outside this submission.
+
+The original Lean proof was produced using **ChatGPT**, and the project owner
+reports **no human mathematical review**. The port and submission preparation
+use Codex. `lean/formalization.yaml` records provenance, sources, scope,
+automation, and the pre-submission review status. Mechanical checking does not
+constitute peer review or prove the shifted-prime hypothesis.
+
+The [Palomar full preflight](.github/workflows/palomar-preflight.yml)
+workflow invokes the official reusable verifier at the immutable
+`PalomarSubmission` revision `d4e41c1d5b0d114c4859e6e5831dc6d3ad1d0d44`, with
+`mode: full` and `execution_profile: palomar-standard-v1`. It checks the exact
+pushed commit, the complete source requirements, metadata, licensing, dependency
+provenance, Challenge/Solution correspondence, permitted axioms, and exported
+proofs through the toolchain's Lean checker and bundled NanoDa and con-ron
+kernels. Download the `mechanical-report-<12-character request id>` artifact for the report;
+`status: pass` is the required full-preflight result. A successful `lake build`
+alone is not this preflight. The workflow runs on pushes and pull requests;
+workflow-dispatch is also available once the workflow is on the default branch.
+
+For submission to <https://submit.palomar-registry.org/>, select the public
+repository and final full 40-character commit SHA, with:
+
+- Project directory: `lean`
+- Comparator configuration: `lean/comparator.json`
+- Formalization metadata: `lean/formalization.yaml`
+
+A full preflight is advisory and does not request editorial review or register
+an entry. Submission and permanent registration are separate decisions.
+
+## Licence
+
+Code, configuration, and repository documentation are licensed under **MIT**
+(see [LICENSE](LICENSE)). The paper source and PDF are licensed under
+**CC BY 4.0**, with attribution to Shisheng Li and Zhong Zhuang (see
+[paper/README.md](paper/README.md) and [paper/LICENSE](paper/LICENSE)).
+Dependencies and cited works retain their own licences.

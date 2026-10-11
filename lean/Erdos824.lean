@@ -1,4 +1,6 @@
-import Erdos824.Defs
-import Erdos824.Core
-import Erdos824.Analytic
-import Erdos824.Main
+module
+
+public import Erdos824.Defs
+public import Erdos824.Core
+public import Erdos824.Analytic
+public import Erdos824.Main

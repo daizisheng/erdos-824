@@ -1,0 +1,110 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+version: "v0.4"
+
+project:
+  name: "Erdős Problem #824 under a smooth shifted-prime hypothesis"
+  description: >-
+    A Lean formalization of the conditional lower bound for the number h(x)
+    of pairs of coprime positive integers a < b < x with equal sums of divisors.
+    Assuming Hypothesis A⁺, which supplies sufficiently many primes p with
+    smooth p+1, h(x) exceeds x^(2-ε) for every ε > 0 and all sufficiently large
+    natural x. The argument adapts Pollack and Pomerance's finite counting
+    method. A⁺ itself, the squarefree strengthening, and the accompanying
+    paper's argument relying on the WD preprint are not formalized here.
+  authors: ["Shisheng Li", "Zhong Zhuang"]
+  license: "MIT"
+  responsible_maintainers: ["Shisheng Li", "Zhong Zhuang"]
+
+classification:
+  arxiv: ["math.NT"]
+  msc2020: ["11N25", "11A25"]
+
+sources:
+  - title: "Coprime pairs with equal sum of divisors, assuming smooth shifted primes"
+    authors: ["Shisheng Li", "Zhong Zhuang"]
+    type: "paper"
+    location: "paper/erdos824.tex"
+    relationship: "formalizes"
+    license: "CC-BY-4.0"
+    note: >-
+      The lower-bound part of Theorem 1.3 only, conditional on Definition 1.2
+      (Hypothesis A⁺). The squarefree addendum and Theorem 1.4 are excluded.
+  - title: "Some problems of Erdős on the sum-of-divisors function"
+    authors: ["Paul Pollack", "Carl Pomerance"]
+    type: "article"
+    location: "Transactions of the American Mathematical Society, Series B 3 (2016), 1–26, Section 6"
+    relationship: "adapts"
+    note: >-
+      Source of the counting argument. The present development chooses
+      explicit parameters to derive the near-quadratic bound from A⁺.
+  - title: "Erdős Problem #824"
+    type: "web problem statement"
+    location: "https://www.erdosproblems.com/824"
+    relationship: "background"
+    note: "The unconditional problem is not claimed to be solved by this formalization."
+
+related_formalizations: []
+
+status:
+  scope: >-
+    The proof library establishes the lower bound from both the weak A⁺
+    hypothesis and a stronger interval hypothesis. Comparator selects only
+    Palomar824.main_result, the weak-A⁺ implication. No proof of either
+    shifted-prime hypothesis is supplied. The conclusion counts all coprime
+    equal-σ pairs and does not assert that they are squarefree. It is stated
+    for natural x; the extension to real x is discussed only informally.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: []
+
+automation:
+  methods:
+    - method: "agent"
+      models: ["ChatGPT"]
+      framework: "ChatGPT"
+      tool_setup: "AI-generated original Lean formalization; exact model and original tool setup were not recorded."
+      prompting_notes: "Original prompts were not recorded in this repository."
+    - method: "agent"
+      models: ["GPT-6"]
+      framework: "Codex"
+      tool_setup: "Lean/Mathlib upgrade, module migration, statement wrapper, metadata, and mechanical preflight."
+      prompting_notes: "Adapt the existing conditional theorem to Palomar's requirements without extending its mathematical claim."
+  spend_usd: "not tracked"
+  notes: >-
+    The project owner reports that ChatGPT wrote the original Lean proof and
+    that no human mathematical review has been performed. This adaptation
+    preserves the explicitly conditional statement. Kernel and Comparator
+    checks are mechanical evidence, not human review or proof of A⁺.
+
+fidelity:
+  divergences: >-
+    The squarefree addendum of Theorem 1.3 is omitted, and the formal conclusion
+    quantifies over natural x rather than real x. The paper's Theorem 1.4 and
+    its conditional corollary involving the unrefereed WD preprint are outside
+    the formalization. A⁺ is an explicit theorem parameter, not a project axiom.
+
+review:
+  status: "unchecked"
+  reviewers: []
+  notes: >-
+    No human mathematical review of the Lean formalization has been performed,
+    as reported by the project owner. Automated porting and mechanical checks
+    do not constitute an independent mathematical review. Palomar editorial
+    review has not yet been requested.
+
+alignment:
+  namespace: "Palomar824"
+  statements:
+    - source: "paper/erdos824.tex, Theorem 1.3 (lower bound only), under Definition 1.2"
+      lean: "Palomar824.main_result"
+      module: "Solution"
+      status: "proved"
+      note: >-
+        Wraps Erdos824.erdos824_of_smoothSuccessorWeak. The Challenge independently
+        spells out the pair count, the smooth-successor assumption, and the
+        quantified lower bound; the proof has no sorry.
+
+acknowledgements: >-
+  The counting argument is due to Pollack and Pomerance, following Erdős.
+  Mathlib supplies the arithmetic, finite-set, and real-analysis libraries.
+  Material AI contributions and the lack of human review are recorded above.

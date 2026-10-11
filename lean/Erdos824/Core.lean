@@ -1,4 +1,8 @@
-import Erdos824.Defs
+module
+
+public import Erdos824.Defs
+
+public section
 
 /-!
 # Erdős #824: finite combinatorial core
@@ -14,7 +18,7 @@ open Finset ArithmeticFunction
 namespace Erdos824
 
 /-- `τ(T) = ∏_{p∈T} (p+1)`, which is `σ(∏_{p∈T} p)` for a set of primes. -/
-def tau (T : Finset ℕ) : ℕ := ∏ p ∈ T, (p + 1)
+@[expose] def tau (T : Finset ℕ) : ℕ := ∏ p ∈ T, (p + 1)
 
 lemma sigma_one_prime {p : ℕ} (hp : p.Prime) : sigma 1 p = p + 1 := by
   have := sigma_one_apply_prime_pow (i := 1) hp
