@@ -1,8 +1,12 @@
-import Erdos824
+module
+
+public import Erdos824
+
+public section
 
 /-! Run `lake env lean Check.lean` to see the statements, the definitions they use,
 and the axioms of the main theorems. The hypothesis `SmoothSuccessorHyp` (smooth p+1) is
-the one external input; it is not formalized here (see `wd/` and the paper). -/
+the one external input; it is not formalized here (see the paper). -/
 
 #print Erdos824.h
 #print Erdos824.SmoothSuccessorHyp
