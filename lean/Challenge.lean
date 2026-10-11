@@ -31,6 +31,14 @@ Here `ArithmeticFunction.sigma 1` is the ordinary sum-of-divisors function. -/
     (fun p => p.1 < p.2 ∧ Nat.Coprime p.1 p.2 ∧
       ArithmeticFunction.sigma 1 p.1 = ArithmeticFunction.sigma 1 p.2)).card
 
+/-- The interval form of A⁺, included to keep the independent definitions in
+exactly the same declaration order as the proof library. The result below uses
+only `SmoothSuccessorHypWeak`, which drops the lower bound on the prime. -/
+@[expose] def SmoothSuccessorHyp : Prop :=
+  ∀ δ : ℝ, 0 < δ → δ < 1/4 → ∀ η : ℝ, 0 < η → ∃ y0 : ℝ, ∀ y : ℝ, y0 ≤ y →
+    (y ^ (1 - η) : ℝ) ≤ (((Finset.Ioc ⌊2*y-2⌋₊ ⌊5*y⌋₊).filter
+        (fun p => p.Prime ∧ ∀ q ∈ (p+1).primeFactors, ((q:ℕ):ℝ) ≤ y ^ δ)).card : ℝ)
+
 /-- Hypothesis A⁺: for each `0 < δ < 1/4` and `η > 0`, all sufficiently large
 real `y` have at least `y^(1-η)` primes `p ≤ ⌊5y⌋` for which every prime factor
 of `p+1` is at most `y^δ`. The suffix `Weak` distinguishes this from the stronger
